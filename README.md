@@ -4,6 +4,8 @@ This is a simple python script that sends the public and/or local IP address of 
 
 ## Simple Install using pipx
 
+[pipx Installation](https://pipx.pypa.io/latest/installation/)
+
 ```bash
 pipx install git+https://github.com/dominikhoebert/send_ip_telegrambot.git
 ```
