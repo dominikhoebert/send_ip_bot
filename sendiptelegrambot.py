@@ -9,6 +9,7 @@ import argparse
 import socket
 import json
 from datetime import datetime
+import time
 
 
 def parse_args():
@@ -62,12 +63,22 @@ def get_external_ip():
 
 
 def get_internal_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    ip = s.getsockname()[0]
-    s.close()
-    # print(socket.gethostbyname(socket.gethostname()))
-    return ip
+    retries = 10
+    for attempt in range(retries):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            ip = s.getsockname()[0]
+            s.close()
+            return ip
+        except OSError as e:
+            if e.errno == 101:  # Network is unreachable
+                print(f"Attempt {attempt + 1}/{retries}: Network is unreachable. Retrying in 10 seconds...")
+                time.sleep(10)
+            else:
+                raise
+    print("Network is still unreachable after 10 attempts. Returning 0.0.0.0.")
+    return "0.0.0.0"
 
 
 def send_ip_address():
