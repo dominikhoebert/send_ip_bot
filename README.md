@@ -1,4 +1,4 @@
-# send_ip_telegrambot
+# send_ip_bot
 
 This is a simple python script that sends the public and/or local IP address of the machine to a notification service using Apprise.
 
@@ -7,16 +7,16 @@ This is a simple python script that sends the public and/or local IP address of 
 [pipx Installation](https://pipx.pypa.io/latest/installation/)
 
 ```bash
-pipx install git+https://github.com/dominikhoebert/send_ip_telegrambot.git
+pipx install git+https://github.com/dominikhoebert/send_ip_bot.git
 ```
 ## Usage
 
 ```bash
-sendiptelegrambot --help
+sendipbot --help
 
 usage: Send IP [-h] [-s FILE] [-n NAME] [-f] [-i] [-e] token chat
 
-Script can send the internal and/or external IP Adress to a Telegram channel using a Telegram Bot
+Script can send the internal and/or external IP Address to an Apprise URL.
 
 positional arguments:
   url                   the Apprise URL to send the notification to
@@ -30,10 +30,13 @@ options:
   -e, --external        set flag to send the external IP
 ```
 
+[Apprise Docs for Notification URLs](https://pypi.org/project/apprise/)
+
 ```bash
-sendiptelegrambot "apprise://telegram://API_TOKEN/CHAT_ID" -i -e
+sendipbot "apprise://telegram://API_TOKEN/CHAT_ID" -i -e
 ```
 
 ```bash
-sendiptelegrambot "apprise://telegram://API_TOKEN/CHAT_ID" -f
+sendipbot "apprise://telegram://API_TOKEN/CHAT_ID" -f
 ```
+
