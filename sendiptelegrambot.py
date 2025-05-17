@@ -1,27 +1,24 @@
 # /// script
-# dependencies = ["pyTelegramBotAPI"]
+# dependencies = ["apprise", "requests"]
 # ///
 
 
-import telebot
 import requests
 import argparse
 import socket
 import json
 from datetime import datetime
 import time
+import apprise
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         prog="Send IP",
-        description="Script can send the internal and/or external IP Adress to a Telegram channel using a Telegram Bot",
+        description="Script can send the internal and/or external IP Address to a Apprise URL",
     )
 
-    parser.add_argument("token", help="the telegram API Token from Botfather", type=str)
-    parser.add_argument(
-        "chat", help="the telegram chat ID to send the messages to", type=str
-    )
+    parser.add_argument("url", help="the apprise URL", type=str)
     parser.add_argument(
         "-s",
         "--file",
@@ -51,7 +48,6 @@ def parse_args():
     args = parser.parse_args()
     # print(args)
     return args
-    # Replace with your Telegram bot API token from BotFather
 
 
 def get_external_ip():
@@ -84,9 +80,8 @@ def get_internal_ip():
 def send_ip_address():
     args = parse_args()
 
-    API_TOKEN = args.token
-    CHAT_ID = args.chat
-    bot = telebot.TeleBot(API_TOKEN)
+    apprise_obj = apprise.Apprise()
+    apprise_obj.add(args.url)
 
     file_name = args.file
     force_send = args.force
@@ -121,7 +116,7 @@ def send_ip_address():
                 + message
                 + f"\nSince: {last_ips['timestamp']}"
         )
-        bot.send_message(CHAT_ID, message, parse_mode="Markdown")
+        apprise_obj.notify(body=message, title="IP Address Update", body_format="markdown")
         last_ips["timestamp"] = str(datetime.now())
         with open(file_name, "w") as outfile:
             json.dump(last_ips, outfile)
